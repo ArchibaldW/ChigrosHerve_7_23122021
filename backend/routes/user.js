@@ -13,4 +13,6 @@ const userCtrl = require('../controllers/user');
 router.post('/signup', userCtrl.signup); // Inscription d'un utilisateur
 router.post('/login', userCtrl.login); // Connection d'un utilisateur
 
+router.post('/users/:id', userCtrl.profile); // aca d'un utilisateur
+
 module.exports = router;

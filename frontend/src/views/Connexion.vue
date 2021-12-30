@@ -1,5 +1,7 @@
 <script>
-const apiURL = "http://localhost:3000/api"
+// import { mapState } from 'vuex'
+import { authenticationService } from '@/_services'
+
 export default {
 	name: "Connexion",
     data() {
@@ -11,8 +13,10 @@ export default {
             passwordConfirmation: null
         }
     },
+    computed:{
+	},
     methods: {
-        checkForm : function(e){
+        checkForm : function(){
             this.errors = [];
             if (!this.username){
                 this.errors.push("Nom d'utilisateur requis");
@@ -23,37 +27,11 @@ export default {
             } 
 
             if (!this.errors.length){
-
-                const postData = {
-                    username: this.username,
-                    password: this.password,
-                }
-
-                fetch (apiURL+"/auth/login/",{
-                    headers: { 
-                        "Content-Type": "application/json",
-                    },
-                    method : "post",
-                    body: JSON.stringify(postData)
-                })
-                    .then(function(res) {
-                        if (res.ok) {
-                            return res.json();
-                        } else {
-                            return res.json().then(function(data){
-                                throw new Error("Une erreur est arrivée : " + res.status + " - " + data.message); 
-                            })
-                        }
+                authenticationService.login(this.username,this.password)
+                    .then(function(value){
+                        console.log(value);
                     })
-                    .then(function(value) {
-                        localStorage.setItem('user',value.token);
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                    });
             }
-
-            e.preventDefault();
         }
     }
 }
@@ -61,7 +39,7 @@ export default {
 
 <template>
     <div>
-        <form id="signupForm" @submit="checkForm" novalidate="true">
+        <form id="signupForm" @submit.prevent="checkForm" novalidate="true">
             <p v-if="errors.length">
                 <b>Veuillez corriger les erreurs suivantes : </b>
                 <ul>

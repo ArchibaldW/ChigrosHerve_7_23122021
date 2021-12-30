@@ -1,5 +1,7 @@
 <script>
-const apiURL = "http://localhost:3000/api"
+import { mapState } from 'vuex'
+import { authenticationService } from '@/_services'
+
 export default {
 	name: "Inscription",
     data() {
@@ -11,8 +13,13 @@ export default {
             passwordConfirmation: null
         }
     },
+    computed:{
+		...mapState({
+			apiURL: "apiURL"
+		})
+	},
     methods: {
-        checkForm : function(e){
+        checkForm : function(){
             this.errors = [];
             if (!this.username){
                 this.errors.push("Nom d'utilisateur requis");
@@ -42,37 +49,11 @@ export default {
 
             if (!this.errors.length){
 
-                const postData = {
-                    username: this.username,
-                    email: this.email,
-                    password: this.password,
-                }
-
-                fetch (apiURL+"/auth/signup/",{
-                    headers: { 
-                        "Content-Type": "application/json",
-                    },
-                    method : "post",
-                    body: JSON.stringify(postData)
-                })
-                    .then(function(res) {
-                        if (res.ok) {
-                            return res.json();
-                        } else {
-                            return res.json().then(function(data){
-                                throw new Error("Une erreur est arrivée : " + res.status + " - " + data.message); 
-                            })
-                        }
-                    })
-                    .then(function(value) {
+                authenticationService.signup(this.username, this.email, this.password)
+                    .then(function(value){
                         console.log(value);
                     })
-                    .catch(function(err){
-                        console.log(err);
-                    });
             }
-
-            e.preventDefault();
         },
         validateEmail : function(email){
             let regex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/i;
@@ -89,7 +70,7 @@ export default {
 
 <template>
     <div>
-        <form id="signupForm" @submit="checkForm" novalidate="true">
+        <form id="signupForm" @submit.prevent="checkForm" novalidate="true">
             <p v-if="errors.length">
                 <b>Veuillez corriger les erreurs suivantes : </b>
                 <ul>
