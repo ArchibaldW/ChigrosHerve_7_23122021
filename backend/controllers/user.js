@@ -74,7 +74,8 @@ exports.login = function(req, res, next){
                             {userId: user._id},
                             process.env.SECRET_TOKEN,
                             {expiresIn: "24h"}
-                        )
+                        ),
+                        admin: user.admin
                     });
                 })
                 .catch(function(error){

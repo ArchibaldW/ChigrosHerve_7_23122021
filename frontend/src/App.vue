@@ -1,66 +1,43 @@
 <template>
     <div id="app">
-        <Nav
-        :currentUser="currentUser"
-        :userFromApi="userFromApi"
-        />
-        currentUser : {{ currentUser }}
-        <br>
-        <br>
-        user : {{ userFromApi }}
-    <router-view/>
+        <Nav/>
+    <router-view :key="$route.fullPath" />
     </div>
 </template>
 
 <script>
 import router from "./router/index";
 import Nav from "./components/Nav.vue"
-import { authenticationService, userService } from '@/_services'
+import { mapState } from "vuex"
 
 export default {
     name: 'app',
     components: {
 		Nav
 	},
-    data(){
-        return {
-            currentUser: authenticationService.currentUserValue,
-            userFromApi: null,
-            local: JSON.stringify(localStorage),
-        }
-    },
-    computed: {
-    // currentUser: authenticationService.currentUserValue,
-    },
+    computed:{
+		...mapState({
+			currentUser: "currentUser",
+		})   
+	},
     created() {
         if (this.currentUser){
-            this.retrieveApiUser();
+            this.$store.dispatch("retrieveApiUser");
         }
     },
     mounted() {
         window.addEventListener('user-connected', () => {
-            this.reRender();
-            router.push('/profil')
+            this.$store.dispatch("reRenderNav");
+            router.push('/profil/'+this.currentUser.userId)
         });
         window.addEventListener('user-disconnected', () => {
-            this.reRender();
+            this.$store.dispatch("reRenderNav");
             router.push('/connexion')
         });
     },
-    methods: {
-        reRender(){
-            this.currentUser = authenticationService.currentUserValue;
-            if (this.currentUser){
-                this.retrieveApiUser()
-            } else {
-                this.userFromApi = null;
-            }
-        },
-        retrieveApiUser(){
-                userService.getById(this.currentUser.userId)
-                .then(user => this.userFromApi = user);
-        }
-    }
+    watch: { $route(to, from) { if(to.name==from.name){
+        location.reload();
+    } } }
 }
 </script>
 

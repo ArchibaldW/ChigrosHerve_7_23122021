@@ -19,4 +19,10 @@ function getById(id){
 
 function getAll(){
     return fetch (config.apiURL+"/users/",requestOptions.get())
+        .then(function(res) {
+            return handle.response(res);
+        })
+        .catch(function (error){
+            handle.error(error)
+        });
 }

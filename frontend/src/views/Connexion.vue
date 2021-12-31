@@ -13,8 +13,6 @@ export default {
             passwordConfirmation: null
         }
     },
-    computed:{
-	},
     methods: {
         checkForm : function(){
             this.errors = [];
@@ -36,6 +34,7 @@ export default {
 
 <template>
     <div>
+        <h1>Connexion</h1>
         <form id="signupForm" @submit.prevent="checkForm" novalidate="true">
             <p v-if="errors.length">
                 <b>Veuillez corriger les erreurs suivantes : </b>

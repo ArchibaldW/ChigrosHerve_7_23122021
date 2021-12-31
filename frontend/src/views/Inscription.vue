@@ -1,5 +1,4 @@
 <script>
-import { mapState } from 'vuex'
 import { authenticationService } from '@/_services'
 
 export default {
@@ -13,11 +12,6 @@ export default {
             passwordConfirmation: null
         }
     },
-    computed:{
-		...mapState({
-			apiURL: "apiURL"
-		})
-	},
     methods: {
         checkForm : function(){
             this.errors = [];
