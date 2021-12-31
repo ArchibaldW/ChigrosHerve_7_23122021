@@ -2,4 +2,4 @@
 /backend/.env
 
 /frontend/node_modules
-/frontend/config.js
+/frontend/src/config.js
