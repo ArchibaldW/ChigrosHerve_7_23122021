@@ -48,11 +48,7 @@ export default {
             }
 
             if (!this.errors.length){
-
                 authenticationService.signup(this.username, this.email, this.password)
-                    .then(function(value){
-                        console.log(value);
-                    })
             }
         },
         validateEmail : function(email){

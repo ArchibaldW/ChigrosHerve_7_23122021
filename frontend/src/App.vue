@@ -1,44 +1,64 @@
 <template>
     <div id="app">
-        <div id="nav">
-            {{ local }}
-            <div id="nav__main">
-            </div>
-            <div id="nav__user">
-                <router-link to="/inscription">Inscription</router-link> |
-                <router-link to="/connexion">Connexion</router-link>
-            </div>
-            <div id="nav__user">
-                <router-link to="/profil">Profil</router-link> |
-                <div @click="logout()">Déconnexion</div>
-            </div>
-        </div>
-        <router-view/>
+        <Nav
+        :currentUser="currentUser"
+        :userFromApi="userFromApi"
+        />
+        currentUser : {{ currentUser }}
+        <br>
+        <br>
+        user : {{ userFromApi }}
+    <router-view/>
     </div>
 </template>
 
 <script>
 import router from "./router/index";
-import config from "./config";
-import { authenticationService } from '@/_services'
+import Nav from "./components/Nav.vue"
+import { authenticationService, userService } from '@/_services'
 
 export default {
     name: 'app',
+    components: {
+		Nav
+	},
     data(){
         return {
-            local: JSON.stringify(localStorage)
+            currentUser: authenticationService.currentUserValue,
+            userFromApi: null,
+            local: JSON.stringify(localStorage),
+        }
+    },
+    computed: {
+    // currentUser: authenticationService.currentUserValue,
+    },
+    created() {
+        if (this.currentUser){
+            this.retrieveApiUser();
         }
     },
     mounted() {
-        window.addEventListener('user-connected', function(){
-            console.log(config);
+        window.addEventListener('user-connected', () => {
+            this.reRender();
             router.push('/profil')
+        });
+        window.addEventListener('user-disconnected', () => {
+            this.reRender();
+            router.push('/connexion')
         });
     },
     methods: {
-        logout() {
-            authenticationService.logout();
-            router.push('/connexion')
+        reRender(){
+            this.currentUser = authenticationService.currentUserValue;
+            if (this.currentUser){
+                this.retrieveApiUser()
+            } else {
+                this.userFromApi = null;
+            }
+        },
+        retrieveApiUser(){
+                userService.getById(this.currentUser.userId)
+                .then(user => this.userFromApi = user);
         }
     }
 }
@@ -46,7 +66,7 @@ export default {
 
 <style lang="scss">
 body {
-  margin: 0;
+    margin: 0;
 }
 
 #app {
@@ -57,18 +77,7 @@ body {
     color: #2c3e50;
 }
 
-#nav {
-    padding: 30px;
-    background-color: #2c3e50;
-    color : white;
-
-    a {
-        font-weight: bold;
-        color: white;
-
-        &.router-link-exact-active {
-          color: #42b983;
-        }
-    }
+.flex{
+    display: flex;
 }
 </style>

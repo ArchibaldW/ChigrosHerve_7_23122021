@@ -27,10 +27,7 @@ export default {
             } 
 
             if (!this.errors.length){
-                authenticationService.login(this.username,this.password)
-                    .then(function(value){
-                        console.log(value);
-                    })
+                authenticationService.login(this.username,this.password);
             }
         }
     }

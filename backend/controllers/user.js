@@ -58,8 +58,6 @@ exports.login = function(req, res, next){
         }
     })
         .then(function(user){
-            
-    console.log("pouet2");
             if (!user){
                 return res.status(401).json({message : "Utilisateur non trouvé !"});
             }

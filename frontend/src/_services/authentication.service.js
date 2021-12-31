@@ -1,6 +1,6 @@
 import config from "@/config";
 
-import { requestOptions } from '@/_helpers';
+import { requestOptions, handle } from '@/_helpers';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -15,45 +15,33 @@ export const authenticationService = {
 };
 
 function login(username, password) {
-    return fetch(config.apiURL+"/auth/login", requestOptions.post({username : username, password : password}))
+    return fetch(config.apiURL+"/users/auth/login", requestOptions.post({username : username, password : password}))
         .then(function(res) {
-            if (res.ok) {
-                return res.json();
-            } else {
-                return res.json().then(function(data){
-                    throw new Error("Une erreur est arrivée : " + res.status + " - " + data.message); 
-                })
-            }
+            return handle.response(res)
         })
         .then(function(user){
-            
             localStorage.setItem('currentUser', JSON.stringify(user));
             currentUserSubject.next(user);
-
+            window.dispatchEvent(new CustomEvent('user-connected'));
             return user;
         })
-        .catch(function(err){
-            console.log(err);
+        .catch(function (error){
+            handle.error(error)
         });
 }
 
 function signup(username, password, email){
-    return fetch (config.apiURL+"/auth/signup/",requestOptions.post({username : username, email : email, password : password}))
+    return fetch (config.apiURL+"/users/auth/signup/",requestOptions.post({username : username, email : email, password : password}))
         .then(function(res) {
-            if (res.ok) {
-                return res.json();
-            } else {
-                return res.json().then(function(data){
-                    throw new Error("Une erreur est arrivée : " + res.status + " - " + data.message); 
-                })
-            }
+            handle.response(res)
         })
-        .catch(function(err){
-            console.log(err);
+        .catch(function (error){
+            handle.error(error)
         });
 }
 
 function logout() {
     localStorage.removeItem('currentUser');
     currentUserSubject.next(null);
+    window.dispatchEvent(new CustomEvent('user-disconnected'));
 }

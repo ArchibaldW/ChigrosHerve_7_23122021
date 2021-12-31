@@ -10,9 +10,9 @@ const userCtrl = require('../controllers/user');
 // const checkPassword = require('../middleware/check-password');
 
 // Routes vers les différentes fonctions
-router.post('/signup', userCtrl.signup); // Inscription d'un utilisateur
-router.post('/login', userCtrl.login); // Connection d'un utilisateur
+router.post('/auth/signup', userCtrl.signup); // Inscription d'un utilisateur
+router.post('/auth/login', userCtrl.login); // Connection d'un utilisateur
 
-router.post('/users/:id', userCtrl.profile); // aca d'un utilisateur
+router.get('/:id', userCtrl.profile); // aca d'un utilisateur
 
 module.exports = router;

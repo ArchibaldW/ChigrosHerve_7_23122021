@@ -31,11 +31,11 @@ app.use(express.json()); // Transforme les données des requêtes en un objet JS
 app.use('/images', express.static(path.join(__dirname,'images')));
 
 //app.use('/api/sauces', sauceRoutes); // Gestion des routes dédiées aus sauces
-app.use('/api/auth', userRoutes); // Gestion des routes dédiées aux utilisateurs
+app.use('/api/users', userRoutes); // Gestion des routes dédiées aux utilisateurs
 
 Db.sync({
     // force : true
-    })
+})
     .then(function(){
         console.log('Connexion à la Bdd')
     })
