@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { authenticationService, userService } from '@/_services'
+import router from "@/router/index";
 
 Vue.use(Vuex)
 
@@ -25,7 +26,7 @@ export default new Vuex.Store({
         },
 		retrieveUserById({state},id){
 			userService.getById(id)
-			.then(user => state.userFromId = user);
+				.then(user => state.userFromId = user);
 		},
         retrieveApiUser({state}){
             userService.getById(state.currentUser.userId)
@@ -33,6 +34,20 @@ export default new Vuex.Store({
         },
 		logout(){
 			authenticationService.logout();
+		},
+		deleteUser({state, dispatch},id){
+			if (!state.userFromApi.id == id && !state.userFromApi.admin){
+				router.push('/profil/' + state.userFromApi.id);
+			} else {
+				if(window.confirm("Voulez vous vraiment supprimer l'utilisateur "+state.userFromApi.username)){
+					authenticationService.deleteUser(id)
+					if (state.userFromApi.id == id){
+						dispatch("logout");
+					} else if (state.userFromApi.admin) {
+						router.push('/liste-utilisateurs/');
+					}
+				}
+			}
 		}
 	},
 	modules: {

@@ -34,10 +34,6 @@ const User = Db.define('User', {
         type: DataTypes.STRING(10),
         allowNull: true
     },
-    poste: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     avatar: {
         type: DataTypes.STRING,
         allowNull: true

@@ -1,5 +1,5 @@
 <script>
-import { mapState } from "vuex"
+import { mapState, mapActions } from "vuex"
 import ProfilTab from "@/components/ProfilTab.vue"
 
 export default {
@@ -8,12 +8,15 @@ export default {
     components: {
 		ProfilTab
 	},
-    computed:{
+    computed: {
 		...mapState({
 			userFromId: "userFromId",
             userFromApi: "userFromApi"
 		}),
 	},
+    methods: {
+        ...mapActions(['deleteUser'])
+    },
     beforeMount(){
         this.$store.dispatch("retrieveUserById", this.id);
     },
@@ -23,7 +26,11 @@ export default {
 <template>
     <div id="profil" v-if="userFromId">
         {{ userFromId }}
-        <router-link v-if="userFromId.id == userFromApi.id || userFromApi.admin" :to="{name: 'EditProfil', params : { id: userFromId.id }}">Modifier le profil</router-link>
+        <div v-if="userFromId.id == userFromApi.id || userFromApi.admin">
+            <router-link  :to="{name: 'EditProfil', params : { id: userFromId.id }}">Modifier {{ userFromId.username }}</router-link>
+            <div @click="deleteUser(userFromId.id)">Supprimer {{ userFromId.username }}</div>
+        </div>
+        
         <h1>{{ userFromId.username }} ({{ userFromId.id }})</h1>
         <div class="flex">
             <img id="profil__img" v-if="userFromId.avatar" :src="userFromId.avatar">
@@ -67,14 +74,23 @@ export default {
 <style lang="scss">
 #profil{
     position: relative;
-    > a{
+    > div:first-child{
         position: absolute;
-        top: 0;
-        right: 20px;
-        color: #42b983;
+        top: 20px;
+        right: 30px;
         font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        > a {
+            color: #42b983;
+        }
+        > div{
+            margin-top: 7px;
+            color: red;
+        }
     }
-    > div {
+    > div:last-child {
         justify-content: space-evenly;
     }
     &__img{

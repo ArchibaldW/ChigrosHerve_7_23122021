@@ -17,7 +17,13 @@ export default {
 <template>
 	<div id="nav">
         {{ userFromApi }}
-        <router-link v-if="!userFromApi" to="/connexion"><img id="nav__disc-image"  src="../assets/icon-left-font-monochrome-white.png"></router-link>
+        <div class="flex" v-if="!userFromApi" id="nav__main">
+            <img id="nav__disc-image"  src="../assets/icon-left-font-monochrome-white.png">
+            <div id="nav__main__user">
+                <div><router-link to="/connexion">Connexion</router-link></div>
+                <div><router-link to="/inscription">Inscription</router-link></div>
+            </div>
+        </div>
         <div class="flex" v-else id="nav__main">
             <div v-if="userFromApi.admin" id="nav__main__menu__admin">
                 <a>Admin</a>

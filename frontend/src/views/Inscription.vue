@@ -60,6 +60,7 @@ export default {
 
 <template>
     <div>
+        <h1>Inscription</h1>
         <form id="signupForm" @submit.prevent="checkForm" novalidate="true">
             <p v-if="errors.length">
                 <b>Veuillez corriger les erreurs suivantes : </b>
@@ -77,14 +78,14 @@ export default {
             </p>
             <p>
                 <label for="password">Mot de passe : </label>
-                <input type="text" name="password" id="password" v-model="password" required>
+                <input type="password" name="password" id="password" v-model="password" required>
             </p>
             <p>
                 <label for="passwordConfirmation">Confirmer le mot de passe : </label>
-                <input type="text" name="passwordConfirmation" id="passwordConfirmation" v-model="passwordConfirmation" required>
+                <input type="password" name="passwordConfirmation" id="passwordConfirmation" v-model="passwordConfirmation" required>
             </p>
             <p>
-                <input type="submit" value="Subscribe!">
+                <input type="submit" value="S'inscrire">
             </p>
         </form>
     </div>

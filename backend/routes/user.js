@@ -15,5 +15,7 @@ router.post('/auth/signup', userCtrl.signup); // Inscription d'un utilisateur
 router.post('/auth/login', userCtrl.login); // Connection d'un utilisateur
 
 router.get('/:id', auth, userCtrl.profile); //  d'un utilisateur
+// router.put('/:id', auth, userCtrl.editUser); //  d'un utilisateur
+router.delete('/:id', userCtrl.deleteUser); //  d'un utilisateur
 
 module.exports = router;

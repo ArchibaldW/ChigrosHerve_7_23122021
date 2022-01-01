@@ -4,12 +4,17 @@ import { requestOptions, handle } from '@/_helpers';
 
 import { BehaviorSubject } from 'rxjs';
 
+import router from "@/router/index";
+
+
+
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
 export const authenticationService = {
     login,
     logout,
     signup,
+    deleteUser,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue () { return currentUserSubject.value }
 };
@@ -31,7 +36,20 @@ function login(username, password) {
 }
 
 function signup(username, password, email){
-    return fetch (config.apiURL+"/users/auth/signup/",requestOptions.post({username : username, email : email, password : password}))
+    return fetch (config.apiURL+"/users/auth/signup/", requestOptions.post({username : username, email : email, password : password}))
+        .then(function (res) {
+            handle.response(res)
+            if (res.ok){
+                router.push('/connexion');
+            }
+        })
+        .catch(function (error){
+            handle.error(error)
+        });
+}
+
+function deleteUser(id){
+    return fetch (config.apiURL+"/users/"+id, requestOptions.delete())
         .then(function(res) {
             handle.response(res)
         })
@@ -39,6 +57,7 @@ function signup(username, password, email){
             handle.error(error)
         });
 }
+
 
 function logout() {
     localStorage.removeItem('currentUser');

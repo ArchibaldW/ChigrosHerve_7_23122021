@@ -48,10 +48,10 @@ export default {
             </p>
             <p>
                 <label for="password">Mot de passe : </label>
-                <input type="text" name="password" id="password" v-model="password" required>
+                <input type="password" name="password" id="password" v-model="password" required>
             </p>
             <p>
-                <input type="submit" value="Subscribe!">
+                <input type="submit" value="Se connecter">
             </p>
         </form>
     </div>

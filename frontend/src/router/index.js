@@ -4,6 +4,7 @@ import Inscription from '../views/Inscription.vue'
 import Connexion from '../views/Connexion.vue'
 import Profil from '../views/Profil.vue'
 import EditProfil from '../views/EditProfil.vue'
+import ListeUtilisateurs from '../views/ListeUtilisateurs.vue'
 
 Vue.use(VueRouter)
 
@@ -32,14 +33,18 @@ const routes = [
         beforeEnter(to, from, next) {
             redirectAdmin(to, from, next)
         }        
+    },
+    {
+        path: "/liste-utilisateurs",
+        name: "ListeUtilisateurs",
+        component: ListeUtilisateurs,      
     }
 ]
 
 function redirectAdmin(to, from, next) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    console.log(currentUser.admin, currentUser.userId, Number(to.params.id));
     if (!currentUser.admin && !(currentUser.userId == Number(to.params.id))) {
-        next('/profil/'+currentUser.userId);
+        next('/profil/' + currentUser.userId);
     } else {
         next()
     }

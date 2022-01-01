@@ -29,14 +29,13 @@ exports.signup = function(req, res, next){
                             email: req.body.email,
                             password: hash
                         })
-                        .then(function(){
-                            res.status(201).json({message: "Utilisateur créé !"});
-                        })
-                        .catch(function(error){
-                            res.status(400).json({error})
-                        });
+                            .then(function(){
+                                res.status(201).json({message: "Utilisateur créé !"});
+                            })
+                            .catch(function(error){
+                                res.status(500).json({error})
+                            });
                     } else {
-                        console.log('trouvé1');
                         res.status(500).json({message: "Nom d'utilisateur déjà utilisé !"})
                     }
                 })
@@ -59,13 +58,13 @@ exports.login = function(req, res, next){
     })
         .then(function(user){
             if (!user){
-                return res.status(401).json({message : "Utilisateur non trouvé !"});
+                return res.status(500).json({message : "Utilisateur non trouvé !"});
             }
             // On compare le mot de passe rentré et le mot de passe en bdd grace à bcrypt
             bcrypt.compare(req.body.password, user.password)
                 .then(function(valid){
                     if (!valid){
-                        return res.status(401).json({message : "Mot de passe incorrect !"});
+                        return res.status(500).json({message : "Mot de passe incorrect !"});
                     }
                     // Si tout se passe bien, on renvoie un status 200 et un objet JSON avec un userId et un TOKEN qui expire au bout de 24h
                     res.status(200).json({
@@ -81,6 +80,21 @@ exports.login = function(req, res, next){
                 .catch(function(error){
                     res.status(500).json({error});
                 });
+        })
+        .catch(function(error){
+            res.status(500).json({error});
+        });
+}
+
+exports.deleteUser = function(req, res, next){
+    console.log('pouet');
+    User.destroy({
+        where : { 
+            id : req.params.id
+        }
+    })
+        .then(function(){
+            res.status(200).json({message : "L'utilisateur a bien été supprimé"});
         })
         .catch(function(error){
             res.status(500).json({error});
