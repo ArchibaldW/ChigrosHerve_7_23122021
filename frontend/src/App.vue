@@ -16,9 +16,7 @@ export default {
 		Nav
 	},
     computed:{
-		...mapState({
-			currentUser: "currentUser",
-		})   
+		...mapState(['currentUser'])
 	},
     created() {
         if (this.currentUser){
@@ -35,9 +33,13 @@ export default {
             router.push('/connexion')
         });
     },
-    watch: { $route(to, from) { if(to.name==from.name){
-        location.reload();
-    } } }
+    watch: { 
+        $route(to, from) { 
+            if(to.name == from.name){
+                location.reload();
+            } 
+        } 
+    }
 }
 </script>
 

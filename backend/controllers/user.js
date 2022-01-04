@@ -86,8 +86,136 @@ exports.login = function(req, res, next){
         });
 }
 
+exports.editUser = function(req, res, next){
+    const userObject = req.body.user;
+    let passwordValid = false;
+    let usernameValid = false;
+    User.findOne({
+        where : {
+            id : req.params.id
+        }
+    })
+        .then(function(user) {
+            if (!user){
+                return res.status(401).json({error : "Utilisateur non trouvé !"});
+            }
+            if (userObject.newPassword){
+                bcrypt.compare(userObject.oldPassword, user.password)
+                    .then(function(valid){
+                        if (!valid){
+                            return res.status(500).json({message : "Ancien mot de passe non valide !"});
+                        } else {
+                            bcrypt.hash(userObject.newPassword, 10) // On hash avec bcrypt en salant 10 fois
+                                .then(function(hash){
+                                    userObject.password = hash
+                                    if (userObject.username != user.username){
+                                        User.findOne({
+                                            where : {
+                                                username : userObject.username
+                                            }
+                                        })
+                                            .then(function(userFound){
+                                                if (userFound){
+                                                    return res.status(500).json({message : "Nom d'utilisateur déjà utilisé !"});
+                                                } else {
+                                                    delete userObject.newPassword;
+                                                    delete userObject.oldPassword;
+                                                    console.log("mot de passe + nom d'utilisateur", userObject);
+                                                    User.update(userObject,{
+                                                        where : {
+                                                            id : req.params.id
+                                                        }
+                                                    })
+                                                        .then(function(){
+                                                            res.status(200).json({message : 'Utilisateur modifié !'})
+                                                        })
+                                                        .catch(function(error){
+                                                            res.status(500).json({error})
+                                                        });
+                                                }
+                                            })
+                                            .catch(function(error){
+                                                return res.status(500).json({error});
+                                            })
+                                    } else {
+                                        delete userObject.newPassword;
+                                        delete userObject.oldPassword;
+                                        console.log("mot de passe",userObject);
+                                        User.update(userObject,{
+                                            where : {
+                                                id : req.params.id
+                                            }
+                                        })
+                                            .then(function(){
+                                                res.status(200).json({message : 'Utilisateur modifié !'})
+                                            })
+                                            .catch(function(error){
+                                                res.status(500).json({error})
+                                            });
+                                    }
+                                })
+                                .catch(function(error){
+                                    res.status(500).json({error})
+                                })
+                        }
+                    })
+                    .catch(function(error){
+                        res.status(500).json({error});
+                    });
+            } else {
+                if (userObject.username != user.username){
+                    User.findOne({
+                        where : {
+                            username : userObject.username
+                        }
+                    })
+                        .then(function(userFound){
+                            if (userFound){
+                                return res.status(500).json({message : "Nom d'utilisateur déjà utilisé !"});
+                            } else {
+                                delete userObject.newPassword;
+                                delete userObject.oldPassword;
+                                console.log("nom d'utilisateur", userObject);
+                                User.update(userObject,{
+                                    where : {
+                                        id : req.params.id
+                                    }
+                                })
+                                    .then(function(){
+                                        res.status(200).json({message : 'Utilisateur modifié !'})
+                                    })
+                                    .catch(function(error){
+                                        res.status(500).json({error})
+                                    });
+                            }
+                        })
+                        .catch(function(error){
+                            return res.status(500).json({error});
+                        })
+                } else {
+                    delete userObject.newPassword;
+                    delete userObject.oldPassword;
+                    console.log("aucun", userObject);
+                    User.update(userObject,{
+                        where : {
+                            id : req.params.id
+                        }
+                    })
+                        .then(function(){
+                            res.status(200).json({message : 'Utilisateur modifié !'})
+                        })
+                        .catch(function(error){
+                            res.status(500).json({error})
+                        });
+                }
+            }
+        })
+        .catch(function(error){
+            res.status(500).json({error});
+        })
+}
+
 exports.deleteUser = function(req, res, next){
-    console.log('pouet');
     User.destroy({
         where : { 
             id : req.params.id
@@ -109,10 +237,24 @@ exports.profile = function(req, res, next){
     })
         .then(function(user){
             if (!user){
-                return res.status(401).json({message : "Utilisateur non trouvé !"});
+                return res.status(500).json({message : "Utilisateur non trouvé !"});
             }
             res.status(200).json(user);
+        })
+        .catch(function(error){
+            res.status(500).json({error});
+        })
+}
 
+exports.listUsers = function(req, res, next){
+    User.findAll({
+        attributes: { exclude : ['password', 'createdAt', 'updatedAt']}
+    })
+        .then(function(list){
+            if (!list){
+                return res.status(500).json({message : "Aucun utilisateurs n'a été trouvé !"});
+            }
+            res.status(200).json(list);
         })
         .catch(function(error){
             res.status(500).json({error});

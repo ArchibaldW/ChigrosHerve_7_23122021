@@ -2,10 +2,6 @@
 export default {
 	name: 'ProfilTab',
     props: {
-        color: {
-            type: String,
-            required: true
-        },
         th: {
             type: String,
             required: true
@@ -16,9 +12,10 @@ export default {
 </script>
 
 <template>
-	<tr :class="color">
+	<tr>
         <th>{{ th }} : </th>
-        <td v-if="td">{{ td }}</td>
+        <td v-if="th=='Administrateur' && td">Admin</td>
+        <td v-else-if="td">{{ td }}</td>
         <td v-else-if="th=='Administrateur'">Non Admin</td>
         <td v-else>Non renseigné</td>
     </tr>
@@ -29,15 +26,16 @@ export default {
     td, th
     {
         height: 20px;
-        border: 1px solid black;
+        border: 1px solid #ddd;
+        padding: 8px;
     }
 
-    .tr{
-        &__white{
-            background-color: white;
+    tr{
+        &:nth-child(even){
+            background-color: #f2f2f2;
         }
-        &__grey{
-            background-color: rgb(190, 190, 190);
+        &:hover{
+            background-color: #ddd;
         }
     }
 }

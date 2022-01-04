@@ -31,19 +31,31 @@ const routes = [
         component: EditProfil,
         props: true,
         beforeEnter(to, from, next) {
-            redirectAdmin(to, from, next)
+            redirectIdAdmin(to, from, next)
         }        
     },
     {
         path: "/liste-utilisateurs",
         name: "ListeUtilisateurs",
-        component: ListeUtilisateurs,      
+        component: ListeUtilisateurs,
+        beforeEnter(to, from , next){
+            redirectAdmin(to, from, next)
+        }      
     }
 ]
 
-function redirectAdmin(to, from, next) {
+function redirectIdAdmin(to, from, next) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     if (!currentUser.admin && !(currentUser.userId == Number(to.params.id))) {
+        next('/profil/' + currentUser.userId);
+    } else {
+        next()
+    }
+}
+
+function redirectAdmin(to, from, next) {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    if (!currentUser.admin) {
         next('/profil/' + currentUser.userId);
     } else {
         next()

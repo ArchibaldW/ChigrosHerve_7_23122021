@@ -9,10 +9,7 @@ export default {
 		ProfilTab
 	},
     computed: {
-		...mapState({
-			userFromId: "userFromId",
-            userFromApi: "userFromApi"
-		}),
+		...mapState(['userFromId','userFromApi'])
 	},
     methods: {
         ...mapActions(['deleteUser'])
@@ -24,51 +21,43 @@ export default {
 </script>
 
 <template>
-    <div id="profil" v-if="userFromId">
-        {{ userFromId }}
-        <div v-if="userFromId.id == userFromApi.id || userFromApi.admin">
-            <router-link  :to="{name: 'EditProfil', params : { id: userFromId.id }}">Modifier {{ userFromId.username }}</router-link>
-            <div @click="deleteUser(userFromId.id)">Supprimer {{ userFromId.username }}</div>
+    <div>
+        <div id="profil" v-if="userFromId && userFromApi">
+            <div v-if="userFromId.id == userFromApi.id || userFromApi.admin">
+                <router-link  :to="{name: 'EditProfil', params : { id: userFromId.id }}">Modifier {{ userFromId.username }}</router-link>
+                <div @click="deleteUser(userFromId.id)">Supprimer {{ userFromId.username }}</div>
+            </div>
+            <h1>{{ userFromId.username }}</h1>
+            <div class="flex">
+                <table id="profil__table">
+                    <ProfilTab
+                        th = "Email"
+                        :td = userFromId.email
+                    />
+                    <ProfilTab
+                        th = "Prénom"
+                        :td = userFromId.firstName
+                    />
+                    <ProfilTab
+                        th = "Nom"
+                        :td = userFromId.lastName
+                    />
+                    <ProfilTab
+                        th = "Téléphone"
+                        :td = userFromId.phoneNumber
+                    />
+                    <ProfilTab
+                        th = "Administrateur"
+                        :td = userFromId.admin
+                    />
+                </table>
+            </div>
         </div>
-        
-        <h1>{{ userFromId.username }} ({{ userFromId.id }})</h1>
-        <div class="flex">
-            <img id="profil__img" v-if="userFromId.avatar" :src="userFromId.avatar">
-            <img id="profil__img" v-else src="../assets/icon.png">
-            <table id="profil__table">
-            <ProfilTab
-                color = "tr__white"
-                th = "Email"
-                :td = userFromId.email
-            />
-            <ProfilTab
-                color = "tr__grey"
-                th = "Prénom"
-                :td = userFromId.firstName
-            />
-            <ProfilTab
-                color = "tr__white"
-                th = "Nom"
-                :td = userFromId.lastName
-            />
-            <ProfilTab
-                color = "tr__grey"
-                th = "Téléphone"
-                :td = userFromId.phoneNumber
-            />
-            <ProfilTab
-                color = "tr__white"
-                th = "Poste"
-                :td = userFromId.poste
-            />
-            <ProfilTab
-                color = "tr__grey"
-                th = "Administrateur"
-                :td = userFromId.admin
-            />
-        </table>
+        <div v-else>
+            <h1>Utilisateur non trouvé</h1>
         </div>
     </div>
+    
 </template>
 
 <style lang="scss">
@@ -88,10 +77,11 @@ export default {
         > div{
             margin-top: 7px;
             color: red;
+            cursor: pointer;
         }
     }
     > div:last-child {
-        justify-content: space-evenly;
+        justify-content: center;
     }
     &__img{
         max-height: 200px;

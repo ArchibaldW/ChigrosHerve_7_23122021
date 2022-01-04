@@ -14,7 +14,6 @@ export const authenticationService = {
     login,
     logout,
     signup,
-    deleteUser,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue () { return currentUserSubject.value }
 };
@@ -47,17 +46,6 @@ function signup(username, password, email){
             handle.error(error)
         });
 }
-
-function deleteUser(id){
-    return fetch (config.apiURL+"/users/"+id, requestOptions.delete())
-        .then(function(res) {
-            handle.response(res)
-        })
-        .catch(function (error){
-            handle.error(error)
-        });
-}
-
 
 function logout() {
     localStorage.removeItem('currentUser');

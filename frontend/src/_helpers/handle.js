@@ -10,6 +10,7 @@ export const handle = {
                     authenticationService.logout();
                     throw new Error("Une erreur est arrivée : " + res.status + " - action non autorisée"); 
                 } else {
+                    alert(data.message);
                     throw new Error("Une erreur est arrivée : " + res.status + " - " + data.message); 
                 }
             })

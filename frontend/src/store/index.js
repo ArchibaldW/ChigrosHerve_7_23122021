@@ -10,6 +10,7 @@ export default new Vuex.Store({
 		currentUser: authenticationService.currentUserValue,
 		userFromId : null,
 		userFromApi: null,
+		userList: null
 	},
 	getters:{
 	},
@@ -32,6 +33,10 @@ export default new Vuex.Store({
             userService.getById(state.currentUser.userId)
                 .then(user => state.userFromApi = user);
         },
+		retrieveUserList({state}){
+			userService.getAll()
+				.then(data => state.userList = data);
+		},
 		logout(){
 			authenticationService.logout();
 		},
@@ -39,8 +44,8 @@ export default new Vuex.Store({
 			if (!state.userFromApi.id == id && !state.userFromApi.admin){
 				router.push('/profil/' + state.userFromApi.id);
 			} else {
-				if(window.confirm("Voulez vous vraiment supprimer l'utilisateur "+state.userFromApi.username)){
-					authenticationService.deleteUser(id)
+				if(window.confirm("Voulez vous vraiment supprimer cet utilisateur")){
+					userService.deleteUser(id)
 					if (state.userFromApi.id == id){
 						dispatch("logout");
 					} else if (state.userFromApi.admin) {

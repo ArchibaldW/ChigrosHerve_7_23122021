@@ -8,9 +8,7 @@ export default {
         return {
             errors: [],
             username: null,
-            email: null,
             password: null,
-            passwordConfirmation: null
         }
     },
     methods: {

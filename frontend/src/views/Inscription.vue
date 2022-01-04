@@ -1,5 +1,6 @@
 <script>
 import { authenticationService } from '@/_services'
+import { mapActions } from "vuex"
 
 export default {
 	name: "Inscription",
@@ -13,6 +14,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['validateEmail', 'validatePassword']),
         checkForm : function(){
             this.errors = [];
             if (!this.username){
@@ -21,17 +23,15 @@ export default {
 
             if (!this.email){
                 this.errors.push("Email requis");
-            } 
-            // else if (!this.validateEmail(this.email)) {
-            //     this.errors.push("Votre email doit être valide")
-            // }
+            } else if (!this.validateEmail(this.email)) {
+                this.errors.push("Votre email doit être valide");
+            }
 
             if (!this.password){
                 this.errors.push("Mot de passe requis");
-            } 
-            // else if (!this.validatePassword(this.password)){
-            //     this.errors.push("Votre mot de passe doit être valide")
-            // }
+            } else if (!this.validatePassword(this.password)){
+                this.errors.push("Votre mot de passe doit être valide");
+            }
 
             if (!this.passwordConfirmation){
                 this.errors.push("Veuillez confirmer votre mot de passe");
@@ -42,7 +42,7 @@ export default {
             }
 
             if (!this.errors.length){
-                authenticationService.signup(this.username, this.email, this.password)
+                authenticationService.signup(this.username, this.email, this.password);
             }
         },
         validateEmail : function(email){
@@ -51,7 +51,7 @@ export default {
         },
         validatePassword : function(password){
             let regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])[^ ]{10,64}$/;
-            return regex.test(password)
+            return regex.test(password);
         }
 
     }

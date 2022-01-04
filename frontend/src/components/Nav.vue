@@ -4,9 +4,7 @@ import { mapState, mapActions } from "vuex"
 export default {
 	name: 'Nav',
     computed:{
-		...mapState({
-			userFromApi: "userFromApi",
-		})
+		...mapState(['userFromApi'])
 	},
     methods: {
         ...mapActions(['logout'])
@@ -26,7 +24,7 @@ export default {
         </div>
         <div class="flex" v-else id="nav__main">
             <div v-if="userFromApi.admin" id="nav__main__menu__admin">
-                <a>Admin</a>
+                <router-link to="/liste-utilisateurs">Liste des utilisateurs</router-link>
             </div>
             <div v-else id="nav__main__menu">
                 <a>Non-admin</a>
@@ -34,8 +32,6 @@ export default {
             <div id="nav__main__user">
                 <div class="flex">
                     <router-link :to="{name: 'Profil', params : { id: userFromApi.id }}">{{ userFromApi.username }}</router-link>
-                    <img id="nav__main__user__img" v-if="userFromApi.avatar" :src="userFromApi.avatar">
-                    <img id="nav__main__user__img" v-else src="../assets/icon.png">
                 </div>
                 <div @click="logout()">Déconnexion</div>
             </div>
@@ -58,16 +54,18 @@ export default {
         align-items: center;
         position: relative;
         height: 100%;
-        &__menu{
-        }
         &__user{
             position: absolute;
             right: 0;               
             padding: 10px;
             > div {
                 &:first-child{
-                    justify-content: space-between;
+                    justify-content: flex-end;
                     margin-bottom: 10px;
+                }
+                &:last-child{
+                    cursor: pointer;
+                    font-weight: bold;
                 }
             }
             &__img{
