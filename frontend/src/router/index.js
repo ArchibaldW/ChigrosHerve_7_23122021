@@ -5,6 +5,10 @@ import Connexion from '../views/Connexion.vue'
 import Profil from '../views/Profil.vue'
 import EditProfil from '../views/EditProfil.vue'
 import ListeUtilisateurs from '../views/ListeUtilisateurs.vue'
+import AjouterPublication from '../views/AjouterPublication.vue'
+import ListePublications from '../views/ListePublications.vue'
+import Publication from '../views/Publication.vue'
+import EditPublication from '../views/EditPublication.vue'
 
 Vue.use(VueRouter)
 
@@ -41,6 +45,28 @@ const routes = [
         beforeEnter(to, from , next){
             redirectAdmin(to, from, next)
         }      
+    },
+    {
+        path: "/ajout-publication",
+        name: "AjouterPublication",
+        component: AjouterPublication,
+    },
+    {
+        path: "/liste-publications",
+        name: "ListePublications",
+        component: ListePublications,
+    },
+    {
+        path: "/publications/:id",
+        name: "Publication",
+        component: Publication,
+        props: true
+    },
+    {
+        path: "/edit-publication/:id",
+        name: "EditPublication",
+        component: EditPublication,
+        props: true
     }
 ]
 

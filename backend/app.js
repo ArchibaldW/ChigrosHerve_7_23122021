@@ -6,6 +6,8 @@ const path = require('path');
 
 // On importe les différentes routes de notre application
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 // On utilise dotenv pour cacher les informations sensibles grâces à des variables d'environnement
 require('dotenv').config();
@@ -32,6 +34,8 @@ app.use('/images', express.static(path.join(__dirname,'images')));
 
 //app.use('/api/sauces', sauceRoutes); // Gestion des routes dédiées aus sauces
 app.use('/api/users', userRoutes); // Gestion des routes dédiées aux utilisateurs
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 Db.sync({
     // force : true

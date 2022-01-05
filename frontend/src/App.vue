@@ -56,6 +56,20 @@ body {
     color: #2c3e50;
 }
 
+input, textarea{
+    padding: 10px;
+    border: 1px solid #b3b2b2;
+    border-radius: 10px;
+}
+
+input[type="submit"]{
+    color : white;
+    background-color: #2c3e50;
+    padding: 15px;
+    border: none;
+    font-weight: bold;
+}
+
 .flex{
     display: flex;
 }

@@ -34,7 +34,7 @@ function login(username, password) {
         });
 }
 
-function signup(username, password, email){
+function signup(username, email, password){
     return fetch (config.apiURL+"/users/auth/signup/", requestOptions.post({username : username, email : email, password : password}))
         .then(function (res) {
             handle.response(res)

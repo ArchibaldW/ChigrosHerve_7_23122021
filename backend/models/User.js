@@ -38,7 +38,7 @@ const User = Db.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: 0
     },
-  });
+});
 
 
 module.exports = User;

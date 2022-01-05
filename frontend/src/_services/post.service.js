@@ -2,19 +2,19 @@ import config from "@/config";
 
 import { requestOptions, handle } from '@/_helpers';
 
-import store from '@/store'
+// import store from '@/store'
 
-// import router from '@/router'
+import router from '@/router'
 
-export const userService = {
+export const postService = {
     getById,
     getAll,
-    editUser,
-    deleteUser,
+    getAllByUserId,
+    createPost,
 }
 
 function getById(id){
-    return fetch(config.apiURL+"/users/"+id,requestOptions.get())
+    return fetch(config.apiURL+"/posts/"+id,requestOptions.get())
         .then(function(res) {
             return handle.response(res);
         })
@@ -24,7 +24,7 @@ function getById(id){
 }
 
 function getAll(){
-    return fetch (config.apiURL+"/users/",requestOptions.get())
+    return fetch(config.apiURL+"/posts",requestOptions.get())
         .then(function(res) {
             return handle.response(res);
         })
@@ -33,24 +33,23 @@ function getAll(){
         });
 }
 
-function editUser(id, user){
-    return fetch (config.apiURL+"/users/"+id, requestOptions.put({user : user}))
+function getAllByUserId(userId){
+    return fetch(config.apiURL+"/posts/user/"+userId,requestOptions.get())
         .then(function(res) {
-            handle.response(res)
-            store.dispatch("retrieveApiUser", id);
-            if(res.ok){
-                router.push('/profil/'+id)
-            }
+            return handle.response(res);
         })
         .catch(function (error){
             handle.error(error)
         });
 }
 
-function deleteUser(id){
-    return fetch (config.apiURL+"/users/"+id, requestOptions.delete())
+function createPost(post){
+    return fetch (config.apiURL+"/posts/",requestOptions.post({post : post}))
         .then(function(res) {
             handle.response(res)
+            if(res.ok){
+                router.push('/liste-publications')
+            }
         })
         .catch(function (error){
             handle.error(error)

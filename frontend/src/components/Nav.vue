@@ -14,7 +14,6 @@ export default {
 
 <template>
 	<div id="nav">
-        {{ userFromApi }}
         <div class="flex" v-if="!userFromApi" id="nav__main">
             <img id="nav__disc-image"  src="../assets/icon-left-font-monochrome-white.png">
             <div id="nav__main__user">

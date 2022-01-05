@@ -1,21 +1,24 @@
 <script>
 import { mapState, mapActions } from "vuex"
 import ProfilTab from "@/components/ProfilTab.vue"
+import PostTab from "@/components/PostTab.vue"
 
 export default {
 	name: "Profil",
     props: ['id'],
     components: {
-		ProfilTab
+		ProfilTab,
+        PostTab
 	},
     computed: {
-		...mapState(['userFromId','userFromApi'])
+		...mapState(['userFromId','userFromApi', 'postsFromUserId'])
 	},
     methods: {
         ...mapActions(['deleteUser'])
     },
     beforeMount(){
         this.$store.dispatch("retrieveUserById", this.id);
+        this.$store.dispatch("retrievePostsByUserId", this.id)
     },
 }
 </script>
@@ -56,16 +59,25 @@ export default {
         <div v-else>
             <h1>Utilisateur non trouvé</h1>
         </div>
+        <div id="posts" v-if="userFromId && userFromApi">
+            <h2>Publications de {{ userFromId.username }}</h2>
+            <div id="user__posts__list">
+                <PostTab
+                    v-for="item in postsFromUserId"
+                    :post = item
+                    :key = item.title
+                />
+            </div>
+        </div>
     </div>
-    
 </template>
 
 <style lang="scss">
 #profil{
     position: relative;
+    margin-bottom: 30px;
     > div:first-child{
         position: absolute;
-        top: 20px;
         right: 30px;
         font-weight: bold;
         display: flex;
