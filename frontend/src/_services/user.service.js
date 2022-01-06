@@ -4,7 +4,7 @@ import { requestOptions, handle } from '@/_helpers';
 
 import store from '@/store'
 
-// import router from '@/router'
+import router from '@/router'
 
 export const userService = {
     getById,

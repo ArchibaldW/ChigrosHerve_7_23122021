@@ -8,7 +8,9 @@ export default {
     data() {
         return {
             username: null,
-            date: convert.time(this.post.createdAt)
+            usernameEdit: null,
+            createdDate: convert.time(this.post.createdAt),
+            updatedDate: convert.time(this.post.updatedAt)
         }
     },
     methods: {
@@ -17,40 +19,61 @@ export default {
     computed:{
 		...mapState(['currentUser'])
 	},
-    props: ['post'],
+    props: ['post','where'],
     beforeMount(){
-        userService.getById(this.post.userId)
-			.then((user) => {
-                this.username = user.username;
-            });
+        if (this.where != "profil"){
+            userService.getById(this.post.userId)
+                .then((user) => {
+                    this.username = user.username;
+                    if (this.post.lastEditUserId && this.post.lastEditUserId != this.post.userId){
+                        userService.getById(this.post.lastEditUserId)
+                            .then((user) => {
+                                this.usernameEdit = user.username;
+                            });
+                    } else if (this.post.lastEditUserId && this.post.lastEditUserId == this.post.userId){
+                        this.usernameEdit = this.username;
+                    }
+                });
+        } else {
+            this.username = this.currentUser.username;
+            if (this.post.lastEditUserId && this.post.lastEditUserId != this.post.userId){
+                userService.getById(this.post.lastEditUserId)
+                    .then((user) => {
+                        this.usernameEdit = user.username;
+                    });
+            } else if (this.post.lastEditUserId && this.post.lastEditUserId == this.post.userId){
+                this.usernameEdit = this.username;
+            }
+        }
+        
     }
 }
 </script>
 
 <template>
     <div class="post__tab">
-        <!-- {{post}} -->
         <div class="flex">
             <div class="post__tab__title">
                 <router-link :to="{name: 'Publication', params : { id: post.id }}">{{ post.title }}</router-link>
             </div>
-            <div class="post__tab__created">
-                Publié {{date}} par <router-link :to="{name: 'Profil', params : { id: post.userId }}">{{ username }}</router-link>
+            <div class="flex post__tab__created">
+                <span>Publié le {{createdDate}} par <router-link :to="{name: 'Profil', params : { id: post.userId }}">{{ username }}</router-link></span>
+                <span v-if="createdDate != updatedDate">Edité le {{updatedDate}} par <router-link :to="{name: 'Profil', params : { id: post.lastEditUserId }}">{{ usernameEdit }}</router-link></span>
             </div>
         </div>
         <div class="post__tab__text">
             {{post.text}}
         </div>
-        <div v-if="post.userId == currentUser.userId" class="flex post__tab__actions">
-            <router-link  :to="{name: 'EditPublication', params : { id: post.id }}">Modifier</router-link>
-            <div @click="deletePost(post)">Supprimer</div>
+        <div v-if="post.userId == currentUser.userId || currentUser.admin" class="flex post__tab__actions">
+            <router-link :to="{name: 'EditPublication', params : { id: post.id }}"><font-awesome-icon icon="edit" /> Modifier</router-link>
+            <div @click="deletePost({where, post})"><font-awesome-icon icon="trash-alt" /> Supprimer</div>
         </div>
     </div>
 </template>
 
 <style lang="scss">
     .post__tab{
-        max-width: 50%;
+        width: 100%;
         margin: 0 auto 30px;
         box-shadow : 5px 3px 5px #e2dfdf;
         border: 1px solid #e2dfdf;
@@ -60,6 +83,8 @@ export default {
             padding: 10px;
             &:first-child{ 
                 justify-content: space-between;
+                flex-wrap: wrap;
+                align-items : center;
             }
         }
         a {
@@ -67,10 +92,22 @@ export default {
             text-decoration: none;
             font-weight: bold;
         }
+        &__title{
+            font-size: 20px;
+            height: 100%;
+            text-decoration: underline;
+            text-align: left;
+            flex-grow: 1;
+        }
+        &__created{
+            flex-direction: column;
+            align-items: flex-end;
+        }
         &__text{
             border: 1px solid #807e7e;
             text-align: left;
             overflow-wrap: break-word;
+            white-space: pre;
         }
         &__actions{
             justify-content: space-between;

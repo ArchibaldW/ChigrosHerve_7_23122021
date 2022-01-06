@@ -14,9 +14,9 @@ const auth = require('../middleware/auth');
 router.post('/auth/signup', userCtrl.signup); // Inscription d'un utilisateur
 router.post('/auth/login', userCtrl.login); // Connection d'un utilisateur
 
-router.get('/:id', auth, userCtrl.profile); //  d'un utilisateur
-router.get('/', auth, userCtrl.listUsers); //  d'un utilisateur
-router.put('/:id', auth, userCtrl.editUser); //  d'un utilisateur
-router.delete('/:id', auth, userCtrl.deleteUser); //  d'un utilisateur
+router.get('/', auth, userCtrl.findUsers); // Récupération des utilisateurs
+router.get('/:id', auth, userCtrl.findOneUser); // Récupération d'un utilisateur avec son id
+router.put('/:id', auth, userCtrl.editUser); // Modification d'un utilisateur
+router.delete('/:id', auth, userCtrl.deleteUser); // Suppression d'un utilisateur
 
 module.exports = router;

@@ -6,11 +6,16 @@ const router = express.Router();
 const commentCtrl = require('../controllers/comment');
 
 //On importe les middleware chargés de checker l'email et le mot de passe
-// const checkEmail = require('../middleware/check-email');
-// const checkPassword = require('../middleware/check-password');
 const auth = require('../middleware/auth');
 
 // Routes vers les différentes fonctions
-// router.post('/auth/signup', userCtrl.signup); // Inscription d'un utilisateur
+router.get('/:id', auth, commentCtrl.findOneComment); // Récupération d'un commentaire avec son id
+router.get('/post/:id', auth, commentCtrl.findCommentsByPostId); // Récupération des commentaires avec postId donné
+router.get('/post/:id/count/', auth, commentCtrl.countCommentsByPostId); // Récupération du nombre de commentaires avec un postId donné
+router.post('/', auth, commentCtrl.createComment); // Création d'un commentaire
+router.put('/:id', auth, commentCtrl.editComment); // Modification d'un commentaire
+router.delete('/:id', auth, commentCtrl.deleteComment); // Suppression d'un commentaire
+
+
 
 module.exports = router;

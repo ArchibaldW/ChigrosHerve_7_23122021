@@ -38,6 +38,10 @@ const User = Db.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: 0
     },
+    
+},
+{
+    timestamps : false
 });
 
 

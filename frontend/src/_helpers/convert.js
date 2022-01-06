@@ -10,12 +10,12 @@ export const convert = {
             jour: Number(datePart1[2]),
             mois: Number(datePart1[1]),
             année: Number(datePart1[0]),
-            heure: Number(datePart2[0]),
-            minute: Number(datePart2[1]),
+            heures: Number(datePart2[0]),
+            minutes: Number(datePart2[1]),
             secondes: Number(datePart2[2])
         }
-        date.heure += 1
-        if (date.heure > 23){
+        date.heures += 1
+        if (date.heures > 23){
             date.jour += 1 
             if (date.jour > nbJours[date.mois-1]){
                 date.mois += 1
@@ -25,8 +25,17 @@ export const convert = {
             }
         }
         date.mois = nomMois[date.mois-1]
-        console.log(date);
-        return `le ${date.jour} ${date.mois} ${date.année} à ${date.heure}:${date.minute}:${date.secondes}`
+        date.heures = twoDigit(date.heures)
+        date.minutes = twoDigit(date.minutes)
+        date.secondes = twoDigit(date.secondes)
+        return `${date.jour} ${date.mois} ${date.année} à ${date.heures}:${date.minutes}:${date.secondes}`
         
     }
+}
+
+function twoDigit(n){
+    if (n < 10){
+        n = '0'+n
+    }
+    return n;
 }

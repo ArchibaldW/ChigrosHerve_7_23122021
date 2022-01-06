@@ -3,7 +3,7 @@ import { mapState } from "vuex"
 import { postService } from '@/_services'
 
 export default {
-	name: "Publication",
+	name: "AddPublication",
     data() {
         return {
             errors: [],
@@ -49,7 +49,7 @@ export default {
 <template>
     <div>
         <h1>Ajouter une publication</h1>
-        <form id="addPostForm" class="flex" @submit.prevent="checkForm" novalidate="true">
+        <form id="add__post__form" class="flex" @submit.prevent="checkForm" novalidate="true">
             <p v-if="errors.length">
                 <b>Veuillez corriger les erreurs suivantes : </b>
                 <ul>
@@ -73,7 +73,7 @@ export default {
 </template>
 
 <style lang="scss">
-#addPostForm{
+#add__post__form{
     flex-direction: column;
     align-items: center;
     > div{

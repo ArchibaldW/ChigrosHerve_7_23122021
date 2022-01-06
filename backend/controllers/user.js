@@ -69,6 +69,7 @@ exports.login = function(req, res, next){
                     // Si tout se passe bien, on renvoie un status 200 et un objet JSON avec un userId et un TOKEN qui expire au bout de 24h
                     res.status(200).json({
                         userId: user.id,
+                        username: user.username,
                         token: jwt.sign(
                             {userId: user._id},
                             process.env.SECRET_TOKEN,
@@ -86,10 +87,40 @@ exports.login = function(req, res, next){
         });
 }
 
+exports.findUsers = function(req, res, next){
+    User.findAll({
+        attributes: { exclude : ['password', 'createdAt', 'updatedAt']}
+    })
+        .then(function(list){
+            if (!list){
+                return res.status(500).json({message : "Aucun utilisateurs n'a été trouvé !"});
+            }
+            res.status(200).json(list);
+        })
+        .catch(function(error){
+            res.status(500).json({error});
+        })
+}
+
+exports.findOneUser = function(req, res, next){
+    User.findOne({
+        where : { 
+            id : req.params.id 
+        }
+    })
+        .then(function(user){
+            if (!user){
+                return res.status(500).json({message : "Utilisateur non trouvé !"});
+            }
+            res.status(200).json(user);
+        })
+        .catch(function(error){
+            res.status(500).json({error});
+        })
+}
+
 exports.editUser = function(req, res, next){
     const userObject = req.body.user;
-    let passwordValid = false;
-    let usernameValid = false;
     User.findOne({
         where : {
             id : req.params.id
@@ -227,36 +258,4 @@ exports.deleteUser = function(req, res, next){
         .catch(function(error){
             res.status(500).json({error});
         });
-}
-
-exports.profile = function(req, res, next){
-    User.findOne({
-        where : { 
-            id : req.params.id 
-        }
-    })
-        .then(function(user){
-            if (!user){
-                return res.status(500).json({message : "Utilisateur non trouvé !"});
-            }
-            res.status(200).json(user);
-        })
-        .catch(function(error){
-            res.status(500).json({error});
-        })
-}
-
-exports.listUsers = function(req, res, next){
-    User.findAll({
-        attributes: { exclude : ['password', 'createdAt', 'updatedAt']}
-    })
-        .then(function(list){
-            if (!list){
-                return res.status(500).json({message : "Aucun utilisateurs n'a été trouvé !"});
-            }
-            res.status(200).json(list);
-        })
-        .catch(function(error){
-            res.status(500).json({error});
-        })
 }

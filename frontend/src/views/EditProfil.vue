@@ -19,7 +19,7 @@ export default {
     },
     props: ['id'],
     computed: {
-		...mapState(['userFromApi'])
+		...mapState(['currentUser'])
 	},
     methods: {
         ...mapActions(['deleteUser']),
@@ -141,7 +141,7 @@ export default {
                     <label for="phoneNumber">N° de Téléphone : </label>
                     <input type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber">
                 </p>
-                <p v-if="userFromApi.admin && !admin">
+                <p v-if="currentUser.admin && !admin">
                     <label for="admin">Admin : </label>
                     <select name="admin" id="admin" v-model="admin">
                         <option value=true>Oui</option>

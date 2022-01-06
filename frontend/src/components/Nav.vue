@@ -23,10 +23,11 @@ export default {
         </div>
         <div class="flex" v-else id="nav__main">
             <div v-if="userFromApi.admin" id="nav__main__menu__admin">
+                <router-link to="/">Publications</router-link>
                 <router-link to="/liste-utilisateurs">Liste des utilisateurs</router-link>
             </div>
             <div v-else id="nav__main__menu">
-                <a>Non-admin</a>
+                <router-link to="/">Publications</router-link>
             </div>
             <div id="nav__main__user">
                 <div class="flex">
@@ -70,6 +71,11 @@ export default {
             &__img{
                 width: 20px;
                 height: 20px;
+            }
+        }
+        &__menu__admin{
+            a:not(:last-child){
+                margin-right: 20px;
             }
         }
     }

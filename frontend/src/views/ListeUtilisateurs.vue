@@ -8,7 +8,7 @@ export default {
 		listeUtilisateursTab
 	},
     computed: {
-		...mapState(['userFromApi', 'userList'])
+		...mapState(['userList'])
 	},
     methods: {
         ...mapActions(['deleteUser'])

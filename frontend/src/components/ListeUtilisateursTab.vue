@@ -1,7 +1,7 @@
 <script>
 import { mapActions } from "vuex"
 export default {
-	name: 'listeUtilisateursTab',
+	name: 'ListeUtilisateursTab',
     props: {
         user: {
             type: Object,

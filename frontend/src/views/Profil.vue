@@ -11,14 +11,15 @@ export default {
         PostTab
 	},
     computed: {
-		...mapState(['userFromId','userFromApi', 'postsFromUserId'])
+		...mapState(['userFromId','userFromApi', 'postsFromUserId', 'postsCountFromUserId']),
 	},
     methods: {
         ...mapActions(['deleteUser'])
     },
     beforeMount(){
         this.$store.dispatch("retrieveUserById", this.id);
-        this.$store.dispatch("retrievePostsByUserId", this.id)
+        this.$store.dispatch("retrievePostsByUserId", this.id);
+        this.$store.dispatch("countPostsByUserId", this.id);
     },
 }
 </script>
@@ -59,12 +60,15 @@ export default {
         <div v-else>
             <h1>Utilisateur non trouvé</h1>
         </div>
-        <div id="posts" v-if="userFromId && userFromApi">
-            <h2>Publications de {{ userFromId.username }}</h2>
+        <div id="profil__posts" v-if="userFromId && userFromApi">
+            
+            <h2>{{postsCountFromUserId}} Publication<span v-if="postsCountFromUserId > 1">s</span> de {{ userFromId.username }}</h2>
+            
             <div id="user__posts__list">
                 <PostTab
                     v-for="item in postsFromUserId"
                     :post = item
+                    where = "profil"
                     :key = item.title
                 />
             </div>
@@ -102,6 +106,11 @@ export default {
     {
         min-width: 400px;
         border-collapse: collapse;
+    }
+
+    &__posts{
+        max-width: 75%;
+        margin: auto;
     }
 }
 

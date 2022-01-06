@@ -13,11 +13,16 @@ const Post = Db.define('Post', {
     },
     title : {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     text: {
         type: DataTypes.STRING(1000),
         allowNull: false
+    },
+    lastEditUserId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
     }
 });
 

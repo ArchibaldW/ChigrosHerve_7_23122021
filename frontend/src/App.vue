@@ -26,14 +26,14 @@ export default {
     mounted() {
         window.addEventListener('user-connected', () => {
             this.$store.dispatch("reRenderNav");
-            router.push('/profil/'+this.currentUser.userId)
+            router.push('/')
         });
         window.addEventListener('user-disconnected', () => {
             this.$store.dispatch("reRenderNav");
             router.push('/connexion')
         });
     },
-    watch: { 
+    watch: {
         $route(to, from) { 
             if(to.name == from.name){
                 location.reload();
@@ -62,12 +62,14 @@ input, textarea{
     border-radius: 10px;
 }
 
-input[type="submit"]{
+input[type="submit"], button{
     color : white;
     background-color: #2c3e50;
     padding: 15px;
+    border-radius: 10px;
     border: none;
     font-weight: bold;
+    box-shadow : 3px 3px 3px #e2dfdf;
 }
 
 .flex{

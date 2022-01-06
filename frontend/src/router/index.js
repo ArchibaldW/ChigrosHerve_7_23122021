@@ -5,10 +5,11 @@ import Connexion from '../views/Connexion.vue'
 import Profil from '../views/Profil.vue'
 import EditProfil from '../views/EditProfil.vue'
 import ListeUtilisateurs from '../views/ListeUtilisateurs.vue'
-import AjouterPublication from '../views/AjouterPublication.vue'
-import ListePublications from '../views/ListePublications.vue'
+import AddPublication from '../views/AddPublication.vue'
+import Publications from '../views/Publications.vue'
 import Publication from '../views/Publication.vue'
 import EditPublication from '../views/EditPublication.vue'
+import { postService } from '@/_services'
 
 Vue.use(VueRouter)
 
@@ -35,7 +36,12 @@ const routes = [
         component: EditProfil,
         props: true,
         beforeEnter(to, from, next) {
-            redirectIdAdmin(to, from, next)
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+            if (!currentUser.admin && !(currentUser.userId == Number(to.params.id))) {
+                next('/profil/' + currentUser.userId);
+            } else {
+                next()
+            }
         }        
     },
     {
@@ -43,18 +49,23 @@ const routes = [
         name: "ListeUtilisateurs",
         component: ListeUtilisateurs,
         beforeEnter(to, from , next){
-            redirectAdmin(to, from, next)
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+            if (!currentUser.admin) {
+                next('/profil/' + currentUser.userId);
+            } else {
+                next()
+            }
         }      
     },
     {
-        path: "/ajout-publication",
-        name: "AjouterPublication",
-        component: AjouterPublication,
+        path: "/add-publication",
+        name: "AddPublication",
+        component: AddPublication,
     },
     {
-        path: "/liste-publications",
-        name: "ListePublications",
-        component: ListePublications,
+        path: "/",
+        name: "Publications",
+        component: Publications,
     },
     {
         path: "/publications/:id",
@@ -66,27 +77,20 @@ const routes = [
         path: "/edit-publication/:id",
         name: "EditPublication",
         component: EditPublication,
-        props: true
+        props: true,
+        beforeEnter(to, from , next){
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            postService.getById(to.params.id)
+                .then((post) => {
+                    if (!post || !currentUser.admin && !(post.userId == currentUser.userId)){
+                        next('/');
+                    } else {
+                        next();
+                    }
+                })
+        }    
     }
 ]
-
-function redirectIdAdmin(to, from, next) {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    if (!currentUser.admin && !(currentUser.userId == Number(to.params.id))) {
-        next('/profil/' + currentUser.userId);
-    } else {
-        next()
-    }
-}
-
-function redirectAdmin(to, from, next) {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    if (!currentUser.admin) {
-        next('/profil/' + currentUser.userId);
-    } else {
-        next()
-    }
-}
 
 const router = new VueRouter({
     routes
