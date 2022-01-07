@@ -1,17 +1,14 @@
 const express = require('express');
-const Db = require('./db/db.js');
 
-// Donne accès au système de fichier
-const path = require('path');
+// On importe les détails de la base de donnée
+const Db = require('./db/db.js');
 
 // On importe les différentes routes de notre application
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
 
-// On utilise dotenv pour cacher les informations sensibles grâces à des variables d'environnement
-require('dotenv').config();
-
+// Création de notre application express
 const app = express();
 
 // Création d'un middleware Header pour contourner les erreurs CORS
@@ -29,23 +26,19 @@ app.use(
 
 app.use(express.json()); // Transforme les données des requêtes en un objet JSON
 
-// Ce Midleware permet de charger les fichiers qui sont dans le repertoire images et de gérer les ressources d'images de façon statique
-app.use('/images', express.static(path.join(__dirname,'images')));
-
-//app.use('/api/sauces', sauceRoutes); // Gestion des routes dédiées aus sauces
 app.use('/api/users', userRoutes); // Gestion des routes dédiées aux utilisateurs
-app.use('/api/posts', postRoutes);
-app.use('/api/comments', commentRoutes);
+app.use('/api/posts', postRoutes); // Gestion des routes dédiées aux publications
+app.use('/api/comments', commentRoutes); // Gestion des routes dédiées aux commentaire
 
-Db.sync({
-    // force : true
-})
-    .then(function(){
-        console.log('Connexion à la Bdd')
-    })
-    .catch(function(err){
-        console.log(err)
-    });
-
+// A décommenter si on veut initialiser (voire forcer un refresh à 0) de la base de donnée
+// Db.sync({
+//     force : true
+// })
+//     .then(function(){
+//         console.log('Connexion à la Bdd')
+//     })
+//     .catch(function(err){
+//         console.log(err)
+//     });
 
 module.exports = app;

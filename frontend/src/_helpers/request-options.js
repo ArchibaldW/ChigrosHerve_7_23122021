@@ -1,5 +1,6 @@
 import { authenticationService } from '@/_services';
 
+// Permet de traiter les requêtes de manière homogènes et de traiter les headers
 export const requestOptions = {
     get() {
         return {
@@ -36,6 +37,7 @@ export const requestOptions = {
     }
 }
 
+// Défini les différents headers
 function headers() {
     const currentUser = authenticationService.currentUserValue || {};
     const authHeader = currentUser.token ? { 'Authorization': 'Bearer ' + currentUser.token } : {}

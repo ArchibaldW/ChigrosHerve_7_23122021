@@ -2,6 +2,7 @@
 import { mapState, mapActions } from "vuex"
 import listeUtilisateursTab from "@/components/ListeUtilisateursTab.vue"
 
+// Vue Administrateur pour voir la liste des utilisateurs
 export default {
 	name: "ListeUtilisateurs",
     components: {
@@ -13,6 +14,7 @@ export default {
     methods: {
         ...mapActions(['deleteUser'])
     },
+    // Avant de monter la vue, on charge la liste des utilisateurs
     beforeMount(){
         this.$store.dispatch("retrieveUserList")
     },

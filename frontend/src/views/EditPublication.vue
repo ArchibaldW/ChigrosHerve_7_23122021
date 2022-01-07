@@ -2,6 +2,7 @@
 import { mapState, mapActions } from "vuex"
 import { postService } from '@/_services'
 
+// Vue pour éditer une publication
 export default {
 	name: "EditPublication",
     data() {
@@ -16,6 +17,7 @@ export default {
     props: ['id'],
     computed: {
 		...mapState(['currentUser']),
+        // On veut la longueur du texte en temps réel
         textLength: function(){
             if (this.text){
                 return this.text.length;
@@ -26,6 +28,8 @@ export default {
 	},
     methods: {
         ...mapActions(['deletePost']),
+        // A la soumission du formulaire, on teste les cas d'erreur
+        // Si aucune erreur on modifie la publication en faisant appel au postService en prenant en compte l'id du dernier éditeur
         checkForm : function(){
             this.errors = [];
             if (!this.title){
@@ -46,6 +50,7 @@ export default {
             }
         }
     },
+    // Avant de monter la vue, on charge les données de la publication pour préremplir le formulaire
     beforeMount(){
         postService.getById(this.id)
 			.then((post) => {
@@ -100,7 +105,7 @@ export default {
         align-items: center;
         > div{
             flex-direction: column;
-            min-width: 50%;
+            min-width: 75%;
             &:first-of-type{
                 margin-bottom: 30px;
             }

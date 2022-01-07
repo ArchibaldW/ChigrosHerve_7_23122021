@@ -1,9 +1,10 @@
 const DataTypes = require ('sequelize');
-
 const Db = require('../db/db.js');
-
 const User = require('../models/User');
 
+// On défini le model lié aux publications
+// Le titre est unique
+// Le texte est requis à la création
 const Post = Db.define('Post', {
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -26,6 +27,8 @@ const Post = Db.define('Post', {
     }
 });
 
+// Chaque publication est lié à un utilisateur,
+// Si un utilisateur est supprimé, alors on supprime ses publications
 Post.belongsTo(User,{
     onDelete: 'CASCADE',
     foreignKey: {

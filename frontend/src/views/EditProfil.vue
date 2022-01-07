@@ -2,6 +2,7 @@
 import { mapState, mapActions } from "vuex"
 import { userService } from '@/_services'
 
+// Vue pour éditer un profil
 export default {
 	name: "EditProfil",
     data() {
@@ -23,6 +24,8 @@ export default {
 	},
     methods: {
         ...mapActions(['deleteUser']),
+        // A la soumission du formulaire, on teste les cas d'erreur
+        // Si aucune erreur on modifie l'utilisateur en faisant appel au userService
         checkForm : function(){
             this.errors = [];
             if (!this.username){
@@ -71,19 +74,28 @@ export default {
                 userService.editUser(this.id, userEdited);
             }
         },
+
+        // Regex pour valider l'email
+        // Détails dans /backend/middleware/check-email.js
         validateEmail : function(email){
             let regex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/i;
             return regex.test(email);
         },
+
+        // Regex pour valider le mot de passe
+        // Détails dans /backend/middleware/check-password.js
         validatePassword : function(password){
             let regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])[^ ]{10,64}$/;
-            return regex.test(password)
+            return regex.test(password);
         },
+
+        // Regex pour valider le numero de téléphone
         validatePhoneNumber : function(phoneNumber){
             let regex = /^[0-9]{10}$/;
             return regex.test(phoneNumber)
         }
     },
+    // Avant de monter la vue, on charge les données de l'utilisateur pour préremplir le formulaire
     beforeMount(){
         userService.getById(this.id)
 			.then((user) => {

@@ -3,6 +3,7 @@ import { mapState, mapActions } from "vuex"
 import ProfilTab from "@/components/ProfilTab.vue"
 import PostTab from "@/components/PostTab.vue"
 
+// Vue pour voir un profil avec ses publications
 export default {
 	name: "Profil",
     props: ['id'],
@@ -16,6 +17,7 @@ export default {
     methods: {
         ...mapActions(['deleteUser'])
     },
+    // Avant de monter la vue, on charge les données de l'utilisateur, ses publications associés ainsi que son nombre de publications
     beforeMount(){
         this.$store.dispatch("retrieveUserById", this.id);
         this.$store.dispatch("retrievePostsByUserId", this.id);
@@ -87,12 +89,9 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        > a {
-            color: #42b983;
-        }
         > div{
             margin-top: 7px;
-            color: red;
+            text-decoration: underline;
             cursor: pointer;
         }
     }

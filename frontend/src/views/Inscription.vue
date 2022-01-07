@@ -1,7 +1,7 @@
 <script>
 import { authenticationService } from '@/_services'
-import { mapActions } from "vuex"
 
+// Vue pour s'inscrire
 export default {
 	name: "Inscription",
     data() {
@@ -14,7 +14,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['validateEmail', 'validatePassword']),
+        // A la soumission du formulaire, on teste les cas d'erreur
+        // Si aucune erreur on créé l'utilisateur en faisant appel à l'authenticationService
         checkForm : function(){
             this.errors = [];
             if (!this.username){
@@ -45,10 +46,16 @@ export default {
                 authenticationService.signup(this.username, this.email, this.password);
             }
         },
+
+        // Regex pour valider l'email
+        // Détails dans /backend/middleware/check-email.js
         validateEmail : function(email){
             let regex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/i;
             return regex.test(email);
         },
+
+        // Regex pour valider le mot de passe
+        // Détails dans /backend/middleware/check-password.js
         validatePassword : function(password){
             let regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])[^ ]{10,64}$/;
             return regex.test(password);

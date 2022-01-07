@@ -1,12 +1,10 @@
 <script>
 import { mapActions } from "vuex"
+
+// Composant pour rendre chaque ligne du tableau de la liste des utilisateurs
 export default {
 	name: 'ListeUtilisateursTab',
-    props: {
-        user: {
-            type: Object,
-        }
-    },
+    props: ['user'],
     methods: {
         ...mapActions(['deleteUser'])
     },

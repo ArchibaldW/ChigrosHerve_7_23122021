@@ -2,6 +2,7 @@
 import { mapState } from "vuex"
 import { postService } from '@/_services'
 
+// Vue pour ajouter une publication
 export default {
 	name: "AddPublication",
     data() {
@@ -13,6 +14,7 @@ export default {
     },
     computed: {
 		...mapState(['currentUser']),
+        // On veut la longueur du texte en temps réel
         textLength: function(){
             if (this.text){
                 return this.text.length;
@@ -22,6 +24,8 @@ export default {
         }
 	},
     methods: {
+        // A la soumission du formulaire, on teste les cas d'erreur
+        // Si aucune erreur on créé la publication en faisant appel au postService
         checkForm : function(){
             this.errors = [];
             if (!this.title){
@@ -78,7 +82,7 @@ export default {
     align-items: center;
     > div{
         flex-direction: column;
-        min-width: 50%;
+        min-width: 75%;
         &:first-of-type{
             margin-bottom: 30px;
         }

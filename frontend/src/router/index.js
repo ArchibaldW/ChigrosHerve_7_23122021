@@ -12,24 +12,28 @@ import EditPublication from '../views/EditPublication.vue'
 import { postService } from '@/_services'
 
 Vue.use(VueRouter)
-
+// On définie le chemin et le nom de chacune de nos vues
 const routes = [
+    // Inscription | Accessible à tous les utilisateurs non connectés
     {
         path: "/inscription",
         name: "Inscription",
         component: Inscription
     },
+    // Connexion | Accessible à tous les utilisateurs non connectés
     {
         path: "/connexion",
         name: "Connexion",
         component: Connexion
     },
+    // Profil | Accessible à tous les utilisateurs connectés | Prends un id en argument
     {
         path: "/profil/:id",
         name: "Profil",
         component: Profil,
         props: true
     },
+    // Edition de profil | Accessible à l'utilisateur concerné ou à un administrateur | Prends un id en argument
     {
         path: "/edit-profil/:id",
         name: "EditProfil",
@@ -44,6 +48,7 @@ const routes = [
             }
         }        
     },
+    // Liste d'utilisateur | Accessible uniquement aux administrateurs
     {
         path: "/liste-utilisateurs",
         name: "ListeUtilisateurs",
@@ -57,22 +62,26 @@ const routes = [
             }
         }      
     },
+    // Ajouter une publication | Accessible à tous les utilisateurs connectés
     {
         path: "/add-publication",
         name: "AddPublication",
         component: AddPublication,
     },
+    // Publications | Accessible à tous les utilisateurs connectés | Sert de page d'acceuil au site une fois connecté
     {
         path: "/",
         name: "Publications",
         component: Publications,
     },
+    // Publication | Accessible à tous les utilisateurs connectés | Prends un id en argument
     {
-        path: "/publications/:id",
+        path: "/publication/:id",
         name: "Publication",
         component: Publication,
         props: true
     },
+    // Edition de publication | Accessible à l'utilisateur concerné ou à un administrateur | Prends un id en argument
     {
         path: "/edit-publication/:id",
         name: "EditPublication",
@@ -96,6 +105,10 @@ const router = new VueRouter({
     routes
 })
 
+// Avant d'entrer sur une page, on vérifie
+// Si l'utilisateur n'est PAS connecté et est sur une page autre que connexion et inscription, alors on le renvoie à la page de connexion
+// Si l'utilisateur est connecté et est sur la page connexion ou inscription, alors on le renvoie vers son profil
+// Sinon on continue
 router.beforeEach(function(to, from, next){
     const publicPages = ["/connexion", "/inscription"];
     const authRequired = !publicPages.includes(to.path);

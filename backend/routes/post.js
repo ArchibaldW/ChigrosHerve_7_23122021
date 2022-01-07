@@ -5,7 +5,7 @@ const router = express.Router();
 // On importe le controller qui défini ce que font les différentes fonctions
 const postCtrl = require('../controllers/post');
 
-// On importe le middleware, auth pour sécuriser les routes
+// On importe le middleware auth pour sécuriser les routes
 const auth = require('../middleware/auth');
 
 // Routes vers les différentes fonctions

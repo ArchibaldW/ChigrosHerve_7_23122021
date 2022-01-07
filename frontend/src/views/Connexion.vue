@@ -1,7 +1,7 @@
 <script>
-// import { mapState } from 'vuex'
 import { authenticationService } from '@/_services'
 
+// Vue pour se connecter
 export default {
 	name: "Connexion",
     data() {
@@ -12,6 +12,8 @@ export default {
         }
     },
     methods: {
+        // A la soumission du formulaire, on teste les cas d'erreur
+        // Si aucune erreur on connecte l'utilisateur en faisant appel à l'authenticationService
         checkForm : function(){
             this.errors = [];
             if (!this.username){

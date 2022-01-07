@@ -1,4 +1,6 @@
 <script>
+
+// Composant pour rendre chaque ligne du tableau dans le profil utilisateur
 export default {
 	name: 'ProfilTab',
     props: {

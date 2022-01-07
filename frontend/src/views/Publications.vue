@@ -2,6 +2,7 @@
 import { mapState, mapActions } from "vuex"
 import PostTab from "@/components/PostTab.vue"
 
+// Vue Administrateur pour voir la liste des publications
 export default {
 	name: "Publications",
     components: {
@@ -13,6 +14,7 @@ export default {
     methods: {
         ...mapActions(['deletePost'])
     },
+    // Avant de monter la vue, on charge la liste des publications
     beforeMount(){
         this.$store.dispatch("retrievePostsList")
     },

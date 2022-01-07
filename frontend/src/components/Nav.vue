@@ -1,6 +1,7 @@
 <script>
 import { mapState, mapActions } from "vuex"
 
+// Composant pour rendre la barre de navigation
 export default {
 	name: 'Nav',
     computed:{
@@ -14,6 +15,7 @@ export default {
 
 <template>
 	<div id="nav">
+        <!-- Si utilisateur pas connecté, alors image + menus connexion/inscription -->
         <div class="flex" v-if="!userFromApi" id="nav__main">
             <img id="nav__disc-image"  src="../assets/icon-left-font-monochrome-white.png">
             <div id="nav__main__user">
@@ -22,13 +24,16 @@ export default {
             </div>
         </div>
         <div class="flex" v-else id="nav__main">
+            <!-- Si utilisateur connecté ET admin, alors menu admin Publications/Liste des utilisateurs -->
             <div v-if="userFromApi.admin" id="nav__main__menu__admin">
                 <router-link to="/">Publications</router-link>
                 <router-link to="/liste-utilisateurs">Liste des utilisateurs</router-link>
             </div>
+            <!-- Si utilisateur connecté ET non admin, alors menu normal Publications -->
             <div v-else id="nav__main__menu">
                 <router-link to="/">Publications</router-link>
             </div>
+            <!-- Si utilisateur connecté , alors menu utilisateur Profil/Deconnexion -->
             <div id="nav__main__user">
                 <div class="flex">
                     <router-link :to="{name: 'Profil', params : { id: userFromApi.id }}">{{ userFromApi.username }}</router-link>
@@ -82,10 +87,6 @@ export default {
     a {
         font-weight: bold;
         color: white;
-
-        &.router-link-exact-active {
-          color: #42b983;
-        }
     }
 }
 </style>

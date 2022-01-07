@@ -1,10 +1,10 @@
 const DataTypes = require ('sequelize');
-
 const Db = require('../db/db.js');
-
 const User = require('../models/User');
 const Post = require('../models/Post');
 
+// On défini le model lié aux commentaires
+// Le texte est requis à la création
 const Comment = Db.define('Comment', {
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -18,6 +18,8 @@ const Comment = Db.define('Comment', {
     }
 });
 
+// Chaque commentaire est lié à un utilisateur,
+// Si un utilisateur est supprimé, alors on supprime ses commentaires
 Comment.belongsTo(User,{
     onDelete: 'CASCADE',
     foreignKey: {
@@ -26,6 +28,8 @@ Comment.belongsTo(User,{
     }
 });
 
+// Chaque commentaire est lié à une publication,
+// Si une publication est supprimée, alors on supprime ses commentaires
 Comment.belongsTo(Post,{
     onDelete: 'CASCADE',
     foreignKey: {
@@ -33,8 +37,5 @@ Comment.belongsTo(Post,{
         allowNull: false,
     }
 });
-
-
-
 
 module.exports = Comment;
